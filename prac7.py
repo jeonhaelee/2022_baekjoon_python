@@ -1,9 +1,6 @@
 # 14719 - 빗물
 
-
-
-
-H, W = map(int, input().split())
+H, W = map(int, input().split()) # 사실 풀이에선 얘 없어도 됨
 blocks = list(map(int, input().split()))
 
 answer = 0

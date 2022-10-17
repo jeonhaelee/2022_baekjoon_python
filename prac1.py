@@ -1,35 +1,34 @@
-# 1744 - 수 묶기
+# 5014 - 스타트링크
 
-N = int(input())
-arr = [int(input()) for _ in range(N)]
 
-positive = []
-negative = []
+from collections import deque
 
-answer = 0
+f, s, g, u, d = map(int, input().split())
 
-for n in arr:
-    if n == 1:
-        answer += 1
-    elif n <= 0:
-        negative.append(n)
-    else:
-        positive.append(n)
 
-negative.sort()
-positive.sort(reverse=True)
+floor_cnt = [1e9]*(f+1)
+visited = [0]*(f+1)
+visited[s] = 1
+floor_cnt[s] = 0
 
-if len(negative) % 2 != 0:
-    negative.append(1)
-if len(positive) % 2 != 0:
-    positive.append(1)
 
-for i in range(0, len(negative), 2):
-    answer += (negative[i] * negative[i+1])
-for i in range(0, len(positive), 2):
-    answer += (positive[i] * positive[i+1])
-
-print(answer)
-
-# input : 4 -1 2 1 3 
-# output : 6
+q = deque()
+q.append((s, 0))
+while q:
+    now, cnt = q.popleft()
+    if now == g:
+        break
+    
+    for i in [u, -d]:
+        next = now + i
+        if next > 0 and next <= f and not visited[next]:
+            visited[next] = 1
+            floor_cnt[next] = cnt + 1
+            q.append((next, floor_cnt[next]))
+    
+    
+ans = floor_cnt[g]
+if ans == 1e9:
+    print("use the stairs")
+else:
+    print(ans)

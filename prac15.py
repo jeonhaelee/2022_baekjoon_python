@@ -1,20 +1,24 @@
 # 11000 - 강의실 배정
-# 시간초과
+# 시간초과2
+
+import time
+start = time.time()
 
 n = int(input())
 
-start_time = []
-end_time = []
+time_dic = {}
 
 cnt = 0
 while cnt < n:
     s, e = map(int, input().split())
-    if s in end_time:
-        idx = end_time.index(s)
-        end_time[idx] = e
-    else:
-        start_time.append(s)
-        end_time.append(e)
+    if s in time_dic.values():
+        for key, value in time_dic.items():
+            if value == s:
+                time_dic[key] = e
+                break
+    else: time_dic[s] = e
     cnt += 1
-        
-print(len(start_time))
+
+    
+print(len(time_dic))
+print(f'time : {time.time() - start}')

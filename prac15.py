@@ -1,24 +1,23 @@
 # 11000 - 강의실 배정
-# 시간초과2
 
-import time
-start = time.time()
+
+import heapq
+import sys
 
 n = int(input())
 
-time_dic = {}
+time_list = [list(map(int, sys.stdin.readline().split())) for _ in range(n)]
 
-cnt = 0
-while cnt < n:
-    s, e = map(int, input().split())
-    if s in time_dic.values():
-        for key, value in time_dic.items():
-            if value == s:
-                time_dic[key] = e
-                break
-    else: time_dic[s] = e
-    cnt += 1
+time_list.sort()
 
-    
-print(len(time_dic))
-print(f'time : {time.time() - start}')
+end_time_queue = []
+heapq.heappush(end_time_queue, time_list[0][1])
+
+for i in range(1, n):
+    if time_list[i][0] < end_time_queue[0]:
+        heapq.heappush(end_time_queue, time_list[i][1])
+    else:
+        heapq.heappop(end_time_queue)
+        heapq.heappush(end_time_queue, time_list[i][1])
+
+print(len(end_time_queue))

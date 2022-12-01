@@ -5,21 +5,38 @@ input = sys.stdin.readline
 
 N = int(input())
 str_list = []
-dic = {} 
+dic = {}
+count_dic = {}
 for _ in range(N):
     string = list(input())[:-1]
     str_list.append(string)
     for i, s in enumerate(string):
+        if s in count_dic:
+            count_dic[s] += 1
+        else:
+            count_dic[s] = 1
         if s in dic and dic[s] < (len(string) - i):
             dic[s] = len(string) - i
         elif s not in dic:
             dic[s] = len(string) - i
 
-dic = dict(sorted(dic.items(), key=lambda x:x[1], reverse=True))
+dic2 = {}
+for k, v in dic.items():
+    if v in dic2:
+        dic2[v].append(k)
+    else:
+        dic2[v] = [k]
 
+dic2 = dict(sorted(dic2.items(), key = lambda x:x[0], reverse=True))
+
+dic_li = []
+for v, k in dic2.items():
+    li = sorted(k, key =lambda x:count_dic[x], reverse=True)
+    dic_li.extend(li)
+    
 number_dic = {}
 l = 9
-for s in dic:
+for s in dic_li:
     number_dic[s] = l
     l -= 1
 
@@ -33,5 +50,5 @@ for string in str_list:
         s = change_num(s)
         number += s
     answer += int(number)
-    
+
 print(answer)

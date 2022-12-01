@@ -3,52 +3,36 @@
 import sys
 input = sys.stdin.readline
 
-N = int(input())
-str_list = []
-dic = {}
-count_dic = {}
-for _ in range(N):
-    string = list(input())[:-1]
-    str_list.append(string)
-    for i, s in enumerate(string):
-        if s in count_dic:
-            count_dic[s] += 1
+N = int(input()) # 단어 개수 입력받기
+
+words = [] # 단어 입력 받아서 넣을 리스트
+for _ in range(N): # N개의 단어 입력 받기
+    words.append(list(input().rstrip()))
+
+alpha_dic = {} # 각각의 알파벳이 어느 자리수에 있는지 판단할 수 있는 딕셔너리
+for word in words: # 입력 받은 단어 돌면서
+    l = len(word) # 해당 단어의 길이
+    for i in range(l): # 단어의 알파벳 하나하나 자리수를 확인해준다
+        if word[i] not in alpha_dic: # 
+            alpha_dic[word[i]] = 10 ** (l - 1 - i) # 예) AB의 A일 때, 10 ** (2 - 1 - 0) = 10
         else:
-            count_dic[s] = 1
-        if s in dic and dic[s] < (len(string) - i):
-            dic[s] = len(string) - i
-        elif s not in dic:
-            dic[s] = len(string) - i
+            alpha_dic[word[i]] += 10 ** (l - 1 - i) # 더해주기 때문에 알파벳 개수까지 파악가능
 
-dic2 = {}
-for k, v in dic.items():
-    if v in dic2:
-        dic2[v].append(k)
-    else:
-        dic2[v] = [k]
+# 알파벳에 숫자를 지정해주기 위해, value 값을 기준으로 내림차순 정렬해준다
+alpha_dic = sorted(alpha_dic.items(), key=lambda x: x[1], reverse=True)
 
-dic2 = dict(sorted(dic2.items(), key = lambda x:x[0], reverse=True))
-
-dic_li = []
-for v, k in dic2.items():
-    li = sorted(k, key =lambda x:count_dic[x], reverse=True)
-    dic_li.extend(li)
-    
-number_dic = {}
-l = 9
-for s in dic_li:
-    number_dic[s] = l
-    l -= 1
-
-def change_num(s):
-    return str(number_dic[s])
+alpha_to_num = {} # 알파벳과 숫자 짝지어서 넣어주는 딕셔너리
+num = 9 # 숫자 범위는 0 ~ 9
+for alpha in alpha_dic: # 위에서 정렬해준 순서대로(가장 큰 값을 갖는 알파벳) 9부터 넣어준다
+    alpha_to_num[alpha[0]] = num
+    num -= 1
 
 answer = 0
-for string in str_list:
-    number = ''
-    for s in string:
-        s = change_num(s)
-        number += s
-    answer += int(number)
+for word in words: # 입력받은 단어들 돌면서
+    num = ""
+    for alpha in word: # 각 단어의 알파벳을 숫자로 바꿔주고
+        num += str(alpha_to_num[alpha])
+    
+    answer += int(num) # answer에 더해준다
 
 print(answer)

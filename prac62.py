@@ -6,14 +6,13 @@ input = sys.stdin.readline
 n = int(input())
 lec_li = [list(map(int, input().split())) for _ in range(n)]
 
-lec_li.sort()
+lec_li.sort(key=lambda x:(x[1], x[0]))
 
-answer = 0
-start = 0; end = lec_li[0][1]
+answer = 1
+end = lec_li[0][1]
 
-for li in lec_li:
+for li in lec_li[1:]:
     if li[0] >= end:
-        start = li[0]
         end = li[1]
         answer += 1
         

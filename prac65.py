@@ -1,4 +1,5 @@
 # 5052 - 전화번호 목록
+# pypy로 제출하면 통과!
 
 import sys
 input = sys.stdin.readline
